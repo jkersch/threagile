@@ -87,7 +87,6 @@ import (
 	"time"
 )
 
-const keepDiagramSourceFiles = false
 const defaultGraphvizDPI, maxGraphvizDPI = 120, 240
 
 const backupHistoryFilesToKeep = 50
@@ -104,7 +103,7 @@ var drawSpaceLinesForLayoutUnfortunatelyFurtherSeparatesAllRanks = true
 var buildTimestamp = ""
 
 var modelFilename, templateFilename /*, diagramFilename, reportFilename, graphvizConversion*/ *string
-var createExampleModel, createStubModel, createEditingSupport, verbose, ignoreOrphanedRiskTracking, generateDataFlowDiagram, generateDataAssetDiagram, generateRisksJSON, generateTechnicalAssetsJSON, generateStatsJSON, generateRisksExcel, generateTagsExcel, generateReportPDF *bool
+var createExampleModel, createStubModel, createEditingSupport, verbose, ignoreOrphanedRiskTracking, generateDataFlowDiagram, generateDataAssetDiagram, generateRisksJSON, generateTechnicalAssetsJSON, generateStatsJSON, generateRisksExcel, generateTagsExcel, generateReportPDF, keepDiagramSourceFiles *bool
 var outputDir, raaPlugin, skipRiskRules, riskRulesPlugins, executeModelMacro *string
 var customRiskRules map[string]model.CustomRiskRule
 var diagramDPI, serverPort *int
@@ -1415,6 +1414,9 @@ func doItViaRuntimeCall(modelFile string, outputDir string, executeModelMacro st
 	}
 	if generateTagsExcel {
 		args = append(args, "-generate-tags-excel")
+	}
+	if keepDiagramSourceFiles {
+		args = append(args, "-keep-diagram-source-files")
 	}
 	if generateRisksJSON {
 		args = append(args, "-generate-risks-json")
@@ -3580,6 +3582,7 @@ func parseCommandlineArgs() {
 	generateRisksExcel = flag.Bool("generate-risks-excel", true, "generate risks excel")
 	generateTagsExcel = flag.Bool("generate-tags-excel", true, "generate tags excel")
 	generateReportPDF = flag.Bool("generate-report-pdf", true, "generate report pdf, including diagrams")
+keepDiagramSourceFiles = flag.Bool("keep-diagram-source-files", false, "Keeps diagram GraphViz source files")
 	diagramDPI = flag.Int("diagram-dpi", defaultGraphvizDPI, "DPI used to render: maximum is "+strconv.Itoa(maxGraphvizDPI)+"")
 	skipRiskRules = flag.String("skip-risk-rules", "", "comma-separated list of risk rules (by their ID) to skip")
 	riskRulesPlugins = flag.String("custom-risk-rules-plugins", "", "comma-separated list of plugins (.so shared object) file names with custom risk rules to load")

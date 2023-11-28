@@ -15,61 +15,6 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
-	"github.com/threagile/threagile/colors"
-	"github.com/threagile/threagile/macros/built-in/add-build-pipeline"
-	"github.com/threagile/threagile/macros/built-in/add-vault"
-	"github.com/threagile/threagile/macros/built-in/pretty-print"
-	"github.com/threagile/threagile/macros/built-in/remove-unused-tags"
-	"github.com/threagile/threagile/macros/built-in/seed-risk-tracking"
-	"github.com/threagile/threagile/macros/built-in/seed-tags"
-	"github.com/threagile/threagile/model"
-	"github.com/threagile/threagile/report"
-	"github.com/threagile/threagile/risks/built-in/accidental-secret-leak"
-	"github.com/threagile/threagile/risks/built-in/code-backdooring"
-	"github.com/threagile/threagile/risks/built-in/container-baseimage-backdooring"
-	"github.com/threagile/threagile/risks/built-in/container-platform-escape"
-	"github.com/threagile/threagile/risks/built-in/cross-site-request-forgery"
-	"github.com/threagile/threagile/risks/built-in/cross-site-scripting"
-	"github.com/threagile/threagile/risks/built-in/dos-risky-access-across-trust-boundary"
-	"github.com/threagile/threagile/risks/built-in/incomplete-model"
-	"github.com/threagile/threagile/risks/built-in/ldap-injection"
-	"github.com/threagile/threagile/risks/built-in/missing-authentication"
-	"github.com/threagile/threagile/risks/built-in/missing-authentication-second-factor"
-	"github.com/threagile/threagile/risks/built-in/missing-build-infrastructure"
-	"github.com/threagile/threagile/risks/built-in/missing-cloud-hardening"
-	"github.com/threagile/threagile/risks/built-in/missing-file-validation"
-	"github.com/threagile/threagile/risks/built-in/missing-hardening"
-	"github.com/threagile/threagile/risks/built-in/missing-identity-propagation"
-	"github.com/threagile/threagile/risks/built-in/missing-identity-provider-isolation"
-	"github.com/threagile/threagile/risks/built-in/missing-identity-store"
-	"github.com/threagile/threagile/risks/built-in/missing-network-segmentation"
-	"github.com/threagile/threagile/risks/built-in/missing-vault"
-	"github.com/threagile/threagile/risks/built-in/missing-vault-isolation"
-	"github.com/threagile/threagile/risks/built-in/missing-waf"
-	"github.com/threagile/threagile/risks/built-in/mixed-targets-on-shared-runtime"
-	"github.com/threagile/threagile/risks/built-in/path-traversal"
-	"github.com/threagile/threagile/risks/built-in/push-instead-of-pull-deployment"
-	"github.com/threagile/threagile/risks/built-in/search-query-injection"
-	"github.com/threagile/threagile/risks/built-in/server-side-request-forgery"
-	"github.com/threagile/threagile/risks/built-in/service-registry-poisoning"
-	"github.com/threagile/threagile/risks/built-in/sql-nosql-injection"
-	"github.com/threagile/threagile/risks/built-in/unchecked-deployment"
-	"github.com/threagile/threagile/risks/built-in/unencrypted-asset"
-	"github.com/threagile/threagile/risks/built-in/unencrypted-communication"
-	"github.com/threagile/threagile/risks/built-in/unguarded-access-from-internet"
-	"github.com/threagile/threagile/risks/built-in/unguarded-direct-datastore-access"
-	"github.com/threagile/threagile/risks/built-in/unnecessary-communication-link"
-	"github.com/threagile/threagile/risks/built-in/unnecessary-data-asset"
-	"github.com/threagile/threagile/risks/built-in/unnecessary-data-transfer"
-	"github.com/threagile/threagile/risks/built-in/unnecessary-technical-asset"
-	"github.com/threagile/threagile/risks/built-in/untrusted-deserialization"
-	"github.com/threagile/threagile/risks/built-in/wrong-communication-link-content"
-	"github.com/threagile/threagile/risks/built-in/wrong-trust-boundary-content"
-	"github.com/threagile/threagile/risks/built-in/xml-external-entity"
-	"golang.org/x/crypto/argon2"
-	"gopkg.in/yaml.v3"
 	"hash/fnv"
 	"io"
 	"io/ioutil"
@@ -85,6 +30,62 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
+	"github.com/threagile/threagile/colors"
+	add_build_pipeline "github.com/threagile/threagile/macros/built-in/add-build-pipeline"
+	add_vault "github.com/threagile/threagile/macros/built-in/add-vault"
+	pretty_print "github.com/threagile/threagile/macros/built-in/pretty-print"
+	remove_unused_tags "github.com/threagile/threagile/macros/built-in/remove-unused-tags"
+	seed_risk_tracking "github.com/threagile/threagile/macros/built-in/seed-risk-tracking"
+	seed_tags "github.com/threagile/threagile/macros/built-in/seed-tags"
+	"github.com/threagile/threagile/model"
+	"github.com/threagile/threagile/report"
+	accidental_secret_leak "github.com/threagile/threagile/risks/built-in/accidental-secret-leak"
+	code_backdooring "github.com/threagile/threagile/risks/built-in/code-backdooring"
+	container_baseimage_backdooring "github.com/threagile/threagile/risks/built-in/container-baseimage-backdooring"
+	container_platform_escape "github.com/threagile/threagile/risks/built-in/container-platform-escape"
+	cross_site_request_forgery "github.com/threagile/threagile/risks/built-in/cross-site-request-forgery"
+	cross_site_scripting "github.com/threagile/threagile/risks/built-in/cross-site-scripting"
+	dos_risky_access_across_trust_boundary "github.com/threagile/threagile/risks/built-in/dos-risky-access-across-trust-boundary"
+	incomplete_model "github.com/threagile/threagile/risks/built-in/incomplete-model"
+	ldap_injection "github.com/threagile/threagile/risks/built-in/ldap-injection"
+	missing_authentication "github.com/threagile/threagile/risks/built-in/missing-authentication"
+	missing_authentication_second_factor "github.com/threagile/threagile/risks/built-in/missing-authentication-second-factor"
+	missing_build_infrastructure "github.com/threagile/threagile/risks/built-in/missing-build-infrastructure"
+	missing_cloud_hardening "github.com/threagile/threagile/risks/built-in/missing-cloud-hardening"
+	missing_file_validation "github.com/threagile/threagile/risks/built-in/missing-file-validation"
+	missing_hardening "github.com/threagile/threagile/risks/built-in/missing-hardening"
+	missing_identity_propagation "github.com/threagile/threagile/risks/built-in/missing-identity-propagation"
+	missing_identity_provider_isolation "github.com/threagile/threagile/risks/built-in/missing-identity-provider-isolation"
+	missing_identity_store "github.com/threagile/threagile/risks/built-in/missing-identity-store"
+	missing_network_segmentation "github.com/threagile/threagile/risks/built-in/missing-network-segmentation"
+	missing_vault "github.com/threagile/threagile/risks/built-in/missing-vault"
+	missing_vault_isolation "github.com/threagile/threagile/risks/built-in/missing-vault-isolation"
+	missing_waf "github.com/threagile/threagile/risks/built-in/missing-waf"
+	mixed_targets_on_shared_runtime "github.com/threagile/threagile/risks/built-in/mixed-targets-on-shared-runtime"
+	path_traversal "github.com/threagile/threagile/risks/built-in/path-traversal"
+	push_instead_of_pull_deployment "github.com/threagile/threagile/risks/built-in/push-instead-of-pull-deployment"
+	search_query_injection "github.com/threagile/threagile/risks/built-in/search-query-injection"
+	server_side_request_forgery "github.com/threagile/threagile/risks/built-in/server-side-request-forgery"
+	service_registry_poisoning "github.com/threagile/threagile/risks/built-in/service-registry-poisoning"
+	sql_nosql_injection "github.com/threagile/threagile/risks/built-in/sql-nosql-injection"
+	unchecked_deployment "github.com/threagile/threagile/risks/built-in/unchecked-deployment"
+	unencrypted_asset "github.com/threagile/threagile/risks/built-in/unencrypted-asset"
+	unencrypted_communication "github.com/threagile/threagile/risks/built-in/unencrypted-communication"
+	unguarded_access_from_internet "github.com/threagile/threagile/risks/built-in/unguarded-access-from-internet"
+	unguarded_direct_datastore_access "github.com/threagile/threagile/risks/built-in/unguarded-direct-datastore-access"
+	unnecessary_communication_link "github.com/threagile/threagile/risks/built-in/unnecessary-communication-link"
+	unnecessary_data_asset "github.com/threagile/threagile/risks/built-in/unnecessary-data-asset"
+	unnecessary_data_transfer "github.com/threagile/threagile/risks/built-in/unnecessary-data-transfer"
+	unnecessary_technical_asset "github.com/threagile/threagile/risks/built-in/unnecessary-technical-asset"
+	untrusted_deserialization "github.com/threagile/threagile/risks/built-in/untrusted-deserialization"
+	wrong_communication_link_content "github.com/threagile/threagile/risks/built-in/wrong-communication-link-content"
+	wrong_trust_boundary_content "github.com/threagile/threagile/risks/built-in/wrong-trust-boundary-content"
+	xml_external_entity "github.com/threagile/threagile/risks/built-in/xml-external-entity"
+	"golang.org/x/crypto/argon2"
+	"gopkg.in/yaml.v3"
 )
 
 const defaultGraphvizDPI, maxGraphvizDPI = 120, 240
@@ -3592,6 +3593,9 @@ keepDiagramSourceFiles = flag.Bool("keep-diagram-source-files", false, "Keeps di
 	listTypes := flag.Bool("list-types", false, "print type information (enum values to be used in models)")
 	listRiskRules := flag.Bool("list-risk-rules", false, "print risk rules")
 	listModelMacros := flag.Bool("list-model-macros", false, "print model macros")
+	explainTypes := flag.Bool("explain-types", false, "Detailed explanation of all the types")
+	explainRiskRules := flag.Bool("explain-risk-rules", false, "Detailed explanation of all the risk rules")
+	explainModelMacros := flag.Bool("explain-model-macros", false, "Detailed explanation of all the model macros")
 	print3rdParty := flag.Bool("print-3rd-party-licenses", false, "print 3rd-party license information")
 	license := flag.Bool("print-license", false, "print license information")
 	flag.Usage = func() {
@@ -3712,6 +3716,7 @@ keepDiagramSourceFiles = flag.Bool("keep-diagram-source-files", false, "Keeps di
 		fmt.Println("------------------")
 		fmt.Println("Custom risk rules:")
 		fmt.Println("------------------")
+		loadCustomRiskRules()
 		for id, customRule := range customRiskRules {
 			fmt.Println(id, "-->", customRule.Category().Title, "--> with tags:", customRule.SupportedTags())
 		}
@@ -3764,6 +3769,97 @@ keepDiagramSourceFiles = flag.Bool("keep-diagram-source-files", false, "Keeps di
 		fmt.Println()
 		os.Exit(0)
 	}
+	if *explainTypes {
+		printLogo()
+		fmt.Println("Explanation for the types:")
+		fmt.Println()
+		printExplainTypes("Authentication", model.AuthenticationValues())
+		printExplainTypes("Authorization", model.AuthorizationValues())
+		printExplainTypes("Confidentiality", model.ConfidentialityValues())
+		printExplainTypes("Criticality", model.CriticalityValues())
+		printExplainTypes("Data Breach Probability", model.DataBreachProbabilityValues())
+		printExplainTypes("Data Format", model.DataFormatValues())
+		printExplainTypes("Encryption", model.EncryptionStyleValues())
+		printExplainTypes("Protocol", model.ProtocolValues())
+		printExplainTypes("Quantity", model.QuantityValues())
+		printExplainTypes("Risk Exploitation Impact", model.RiskExploitationImpactValues())
+		printExplainTypes("Risk Exploitation likelihood", model.RiskExploitationLikelihoodValues())
+		printExplainTypes("Risk Function", model.RiskFunctionValues())
+		printExplainTypes("Risk Severity", model.RiskSeverityValues())
+		printExplainTypes("Risk Status", model.RiskStatusValues())
+		printExplainTypes("STRIDE", model.STRIDEValues())
+		printExplainTypes("Technical Asset Machine", model.TechnicalAssetMachineValues())
+		printExplainTypes("Technical Asset Size", model.TechnicalAssetSizeValues())
+		printExplainTypes("Technical Asset Technology", model.TechnicalAssetTechnologyValues())
+		printExplainTypes("Technical Asset Type", model.TechnicalAssetTypeValues())
+		printExplainTypes("Trust Boundary Type", model.TrustBoundaryTypeValues())
+		printExplainTypes("Usage", model.UsageValues())
+
+		os.Exit(0)
+	}
+	if *explainModelMacros {
+		printLogo()
+		fmt.Println("Explanation for the model macros:")
+		fmt.Println()
+		fmt.Printf("%v: %v\n", add_build_pipeline.GetMacroDetails().ID, add_build_pipeline.GetMacroDetails().Description)
+		fmt.Printf("%v: %v\n", add_vault.GetMacroDetails().ID, add_vault.GetMacroDetails().Description)
+		fmt.Printf("%v: %v\n", pretty_print.GetMacroDetails().ID, pretty_print.GetMacroDetails().Description)
+		fmt.Printf("%v: %v\n", remove_unused_tags.GetMacroDetails().ID, remove_unused_tags.GetMacroDetails().Description)
+		fmt.Printf("%v: %v\n", seed_risk_tracking.GetMacroDetails().ID, seed_risk_tracking.GetMacroDetails().Description)
+		fmt.Printf("%v: %v\n", seed_tags.GetMacroDetails().ID, seed_tags.GetMacroDetails().Description)
+		fmt.Println()
+		os.Exit(0)
+
+	}
+	if *explainRiskRules {
+		printLogo()
+		fmt.Println("Explanation for risk rules:")
+		fmt.Println()
+		fmt.Printf("%v: %v\n", accidental_secret_leak.Category().Id, accidental_secret_leak.Category().Description)
+		fmt.Printf("%v: %v\n", code_backdooring.Category().Id, code_backdooring.Category().Description)
+		fmt.Printf("%v: %v\n", container_baseimage_backdooring.Category().Id, container_baseimage_backdooring.Category().Description)
+		fmt.Printf("%v: %v\n", container_platform_escape.Category().Id, container_platform_escape.Category().Description)
+		fmt.Printf("%v: %v\n", cross_site_request_forgery.Category().Id, cross_site_request_forgery.Category().Description)
+		fmt.Printf("%v: %v\n", cross_site_scripting.Category().Id, cross_site_scripting.Category().Description)
+		fmt.Printf("%v: %v\n", dos_risky_access_across_trust_boundary.Category().Id, dos_risky_access_across_trust_boundary.Category().Description)
+		fmt.Printf("%v: %v\n", incomplete_model.Category().Id, incomplete_model.Category().Description)
+		fmt.Printf("%v: %v\n", ldap_injection.Category().Id, ldap_injection.Category().Description)
+		fmt.Printf("%v: %v\n", missing_authentication.Category().Id, missing_authentication.Category().Description)
+		fmt.Printf("%v: %v\n", missing_authentication_second_factor.Category().Id, missing_authentication_second_factor.Category().Description)
+		fmt.Printf("%v: %v\n", missing_build_infrastructure.Category().Id, missing_build_infrastructure.Category().Description)
+		fmt.Printf("%v: %v\n", missing_cloud_hardening.Category().Id, missing_cloud_hardening.Category().Description)
+		fmt.Printf("%v: %v\n", missing_file_validation.Category().Id, missing_file_validation.Category().Description)
+		fmt.Printf("%v: %v\n", missing_hardening.Category().Id, missing_hardening.Category().Description)
+		fmt.Printf("%v: %v\n", missing_identity_propagation.Category().Id, missing_identity_propagation.Category().Description)
+		fmt.Printf("%v: %v\n", missing_identity_provider_isolation.Category().Id, missing_identity_provider_isolation.Category().Description)
+		fmt.Printf("%v: %v\n", missing_identity_store.Category().Id, missing_identity_store.Category().Description)
+		fmt.Printf("%v: %v\n", missing_network_segmentation.Category().Id, missing_network_segmentation.Category().Description)
+		fmt.Printf("%v: %v\n", missing_vault.Category().Id, missing_vault.Category().Description)
+		fmt.Printf("%v: %v\n", missing_vault_isolation.Category().Id, missing_vault_isolation.Category().Description)
+		fmt.Printf("%v: %v\n", missing_waf.Category().Id, missing_waf.Category().Description)
+		fmt.Printf("%v: %v\n", mixed_targets_on_shared_runtime.Category().Id, mixed_targets_on_shared_runtime.Category().Description)
+		fmt.Printf("%v: %v\n", path_traversal.Category().Id, path_traversal.Category().Description)
+		fmt.Printf("%v: %v\n", push_instead_of_pull_deployment.Category().Id, push_instead_of_pull_deployment.Category().Description)
+		fmt.Printf("%v: %v\n", search_query_injection.Category().Id, search_query_injection.Category().Description)
+		fmt.Printf("%v: %v\n", server_side_request_forgery.Category().Id, server_side_request_forgery.Category().Description)
+		fmt.Printf("%v: %v\n", service_registry_poisoning.Category().Id, service_registry_poisoning.Category().Description)
+		fmt.Printf("%v: %v\n", sql_nosql_injection.Category().Id, sql_nosql_injection.Category().Description)
+		fmt.Printf("%v: %v\n", unchecked_deployment.Category().Id, unchecked_deployment.Category().Description)
+		fmt.Printf("%v: %v\n", unencrypted_asset.Category().Id, unencrypted_asset.Category().Description)
+		fmt.Printf("%v: %v\n", unencrypted_communication.Category().Id, unencrypted_communication.Category().Description)
+		fmt.Printf("%v: %v\n", unguarded_access_from_internet.Category().Id, unguarded_access_from_internet.Category().Description)
+		fmt.Printf("%v: %v\n", unguarded_direct_datastore_access.Category().Id, unguarded_direct_datastore_access.Category().Description)
+		fmt.Printf("%v: %v\n", unnecessary_communication_link.Category().Id, unnecessary_communication_link.Category().Description)
+		fmt.Printf("%v: %v\n", unnecessary_data_asset.Category().Id, unnecessary_data_asset.Category().Description)
+		fmt.Printf("%v: %v\n", unnecessary_data_transfer.Category().Id, unnecessary_data_transfer.Category().Description)
+		fmt.Printf("%v: %v\n", unnecessary_technical_asset.Category().Id, unnecessary_technical_asset.Category().Description)
+		fmt.Printf("%v: %v\n", untrusted_deserialization.Category().Id, untrusted_deserialization.Category().Description)
+		fmt.Printf("%v: %v\n", wrong_communication_link_content.Category().Id, wrong_communication_link_content.Category().Description)
+		fmt.Printf("%v: %v\n", wrong_trust_boundary_content.Category().Id, wrong_trust_boundary_content.Category().Description)
+		fmt.Printf("%v: %v\n", xml_external_entity.Category().Id, xml_external_entity.Category().Description)
+		fmt.Println()
+		os.Exit(0)
+	}
 	if *print3rdParty {
 		printLogo()
 		fmt.Println("Kudos & Credits to the following open-source projects:")
@@ -3772,7 +3868,7 @@ keepDiagramSourceFiles = flag.Bool("keep-diagram-source-files", false, "Keeps di
 		fmt.Println(" - graphviz (CPL License): https://graphviz.gitlab.io/license/")
 		fmt.Println(" - gofpdf (MIT License): https://github.com/jung-kurt/gofpdf/blob/master/LICENSE")
 		fmt.Println(" - go-chart (MIT License): https://github.com/wcharczuk/go-chart/blob/master/LICENSE")
-		fmt.Println(" - excelize (BSD License): https://github.com/360EntSecGroup-Skylar/excelize/blob/master/LICENSE")
+		fmt.Println(" - excelize (BSD License): https://github.com/qax-os/excelize/blob/master/LICENSE")
 		fmt.Println(" - graphics-go (BSD License): https://github.com/BurntSushi/graphics-go/blob/master/LICENSE")
 		fmt.Println(" - google-uuid (BSD License): https://github.com/google/uuid/blob/master/LICENSE")
 		fmt.Println(" - gin-gonic (MIT License): https://github.com/gin-gonic/gin/blob/master/LICENSE")
@@ -3890,6 +3986,14 @@ func printExamples() {
 
 func printTypes(title string, value interface{}) {
 	fmt.Println(fmt.Sprintf("  %v: %v", title, value))
+}
+
+// explainTypes prints and explanation block and a header
+func printExplainTypes(title string, value []model.TypeEnum) {
+	fmt.Println(title)
+	for _, candidate := range value {
+		fmt.Printf("\t %v: %v\n", candidate, candidate.Explain())
+	}
 }
 
 func copyFile(src, dst string) (int64, error) {
@@ -5493,7 +5597,7 @@ func makeTechAssetNode(technicalAsset model.TechnicalAsset, simplified bool) str
 				color = "#444444" // since black is too dark here as fill color
 			}
 		}
-		return "  " + hash(technicalAsset.Id) + ` [ shape="box" style="filled" fillcolor="` + color + `" 
+		return "  " + hash(technicalAsset.Id) + ` [ shape="box" style="filled" fillcolor="` + color + `"
 				label=<<b>` + encode(technicalAsset.Title) + `</b>> penwidth="3.0" color="` + color + `" ];
 				`
 	} else {
@@ -5534,7 +5638,7 @@ func makeTechAssetNode(technicalAsset model.TechnicalAsset, simplified bool) str
 
 		return "  " + hash(technicalAsset.Id) + ` [
 	label=<<table border="0" cellborder="` + compartmentBorder + `" cellpadding="2" cellspacing="0"><tr><td><font point-size="15" color="` + colors.DarkBlue + `">` + lineBreak + technicalAsset.Technology.String() + `</font><br/><font point-size="15" color="` + colors.LightGray + `">` + technicalAsset.Size.String() + `</font></td></tr><tr><td><b><font color="` + technicalAsset.DetermineLabelColor() + `">` + encode(title) + `</font></b><br/></td></tr><tr><td>` + attackerAttractivenessLabel + `</td></tr></table>>
-	shape=` + shape + ` style="` + technicalAsset.DetermineShapeBorderLineStyle() + `,` + technicalAsset.DetermineShapeStyle() + `" penwidth="` + technicalAsset.DetermineShapeBorderPenWidth() + `" fillcolor="` + technicalAsset.DetermineShapeFillColor() + `" 
+	shape=` + shape + ` style="` + technicalAsset.DetermineShapeBorderLineStyle() + `,` + technicalAsset.DetermineShapeStyle() + `" penwidth="` + technicalAsset.DetermineShapeBorderPenWidth() + `" fillcolor="` + technicalAsset.DetermineShapeFillColor() + `"
 	peripheries=` + strconv.Itoa(technicalAsset.DetermineShapePeripheries()) + `
 	color="` + technicalAsset.DetermineShapeBorderColor() + "\"\n  ]; "
 	}

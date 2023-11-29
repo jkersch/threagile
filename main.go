@@ -1092,7 +1092,7 @@ func doIt(inputFilename string, outputDirectory string) {
 		return
 	}
 
-	renderDataFlowDiagram, renderDataAssetDiagram, renderRisksJSON, renderTechnicalAssetsJSON, renderStatsJSON, renderRisksExcel, renderTagsExcel, renderPDF := *generateDataFlowDiagram, *generateDataAssetDiagram, *generateRisksJSON, *generateTechnicalAssetsJSON, *generateStatsJSON, *generateRisksExcel, *generateTagsExcel, *generateReportPDF
+	renderDataFlowDiagram, renderDataAssetDiagram, renderRisksJSON, renderTechnicalAssetsJSON, renderStatsJSON, renderRisksExcel, renderTagsExcel, renderPDF, keepSource := *generateDataFlowDiagram, *generateDataAssetDiagram, *generateRisksJSON, *generateTechnicalAssetsJSON, *generateStatsJSON, *generateRisksExcel, *generateTagsExcel, *generateReportPDF, *keepDiagramSourceFiles
 	if renderPDF { // as the PDF report includes both diagrams
 		renderDataFlowDiagram, renderDataAssetDiagram = true, true
 	}
@@ -1100,7 +1100,7 @@ func doIt(inputFilename string, outputDirectory string) {
 	// Data-flow Diagram rendering
 	if renderDataFlowDiagram {
 		gvFile := outputDirectory + "/" + dataFlowDiagramFilenameDOT
-		if !keepDiagramSourceFiles {
+		if !keepSource {
 			tmpFileGV, err := ioutil.TempFile(model.TempFolder, dataFlowDiagramFilenameDOT)
 			checkErr(err)
 			gvFile = tmpFileGV.Name()
@@ -1112,7 +1112,7 @@ func doIt(inputFilename string, outputDirectory string) {
 	// Data Asset Diagram rendering
 	if renderDataAssetDiagram {
 		gvFile := outputDirectory + "/" + dataAssetDiagramFilenameDOT
-		if !keepDiagramSourceFiles {
+		if !keepSource {
 			tmpFile, err := ioutil.TempFile(model.TempFolder, dataAssetDiagramFilenameDOT)
 			checkErr(err)
 			gvFile = tmpFile.Name()
@@ -1373,7 +1373,7 @@ func execute(context *gin.Context, dryRun bool) (yamlContent []byte, ok bool) {
 			tmpOutputDir + "/" + jsonTechnicalAssetsFilename,
 			tmpOutputDir + "/" + jsonStatsFilename,
 		}
-		if keepDiagramSourceFiles {
+		if *keepDiagramSourceFiles {
 			files = append(files, tmpOutputDir+"/"+dataFlowDiagramFilenameDOT)
 			files = append(files, tmpOutputDir+"/"+dataAssetDiagramFilenameDOT)
 		}

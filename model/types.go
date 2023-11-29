@@ -822,7 +822,7 @@ func ProtocolValues() []TypeEnum {
 		JRMP_encrypted,
 		InProcessLibraryCall,
 		ContainerSpawning,
-		SNMP
+		SNMP,
 	}
 }
 
@@ -1035,7 +1035,7 @@ func TechnicalAssetTechnologyValues() []TypeEnum {
 		BlockStorage,
 		Library,
 		Firewall,
-		PKI
+		PKI,
 	}
 }
 

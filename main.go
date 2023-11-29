@@ -1416,7 +1416,7 @@ func doItViaRuntimeCall(modelFile string, outputDir string, executeModelMacro st
 	if generateTagsExcel {
 		args = append(args, "-generate-tags-excel")
 	}
-	if keepDiagramSourceFiles {
+	if *keepDiagramSourceFiles {
 		args = append(args, "-keep-diagram-source-files")
 	}
 	if generateRisksJSON {
@@ -1933,7 +1933,7 @@ func analyzeModelOnServerDirectly(context *gin.Context) {
 		tmpOutputDir + "/" + jsonTechnicalAssetsFilename,
 		tmpOutputDir + "/" + jsonStatsFilename,
 	}
-	if keepDiagramSourceFiles {
+	if *keepDiagramSourceFiles {
 		files = append(files, tmpOutputDir+"/"+dataFlowDiagramFilenameDOT)
 		files = append(files, tmpOutputDir+"/"+dataAssetDiagramFilenameDOT)
 	}

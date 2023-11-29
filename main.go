@@ -3582,6 +3582,7 @@ func parseCommandlineArgs() {
 	generateStatsJSON = flag.Bool("generate-stats-json", true, "generate stats json")
 	generateRisksExcel = flag.Bool("generate-risks-excel", true, "generate risks excel")
 	generateTagsExcel = flag.Bool("generate-tags-excel", true, "generate tags excel")
+	keepDiagramSourceFiles = flag.Bool("keep-diagram-source-files", true, "generate tags excel")
 	generateReportPDF = flag.Bool("generate-report-pdf", true, "generate report pdf, including diagrams")
 keepDiagramSourceFiles = flag.Bool("keep-diagram-source-files", false, "Keeps diagram GraphViz source files")
 	diagramDPI = flag.Int("diagram-dpi", defaultGraphvizDPI, "DPI used to render: maximum is "+strconv.Itoa(maxGraphvizDPI)+"")

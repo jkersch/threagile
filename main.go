@@ -4357,6 +4357,10 @@ func parseModel(inputFilename string) {
 				technicalAssetTechnology = model.BlockStorage
 			case model.Library.String():
 				technicalAssetTechnology = model.Library
+			case model.Firewall.String():
+				technicalAssetTechnology = model.Firewall
+			case model.PKI.String():
+				technicalAssetTechnology = model.PKI
 			default:
 				panic(errors.New("unknown 'technology' value of technical asset '" + title + "': " + fmt.Sprintf("%v", asset.Technology)))
 			}

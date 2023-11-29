@@ -970,8 +970,8 @@ const (
 	Scheduler
 	Mainframe
 	BlockStorage
-	Library,
-	Firewall,
+	Library
+	Firewall
 	PKI
 )
 

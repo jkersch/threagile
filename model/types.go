@@ -770,6 +770,7 @@ const (
 	JRMP_encrypted
 	InProcessLibraryCall
 	ContainerSpawning
+	SNMP
 )
 
 func ProtocolValues() []TypeEnum {
@@ -821,6 +822,7 @@ func ProtocolValues() []TypeEnum {
 		JRMP_encrypted,
 		InProcessLibraryCall,
 		ContainerSpawning,
+		SNMP
 	}
 }
 
@@ -872,6 +874,7 @@ var ProtocolTypeDescription = [...]TypeDescription{
 	{"jrmp-encrypted", "Java Remote Method Protocol, encrypted"},
 	{"in-process-library-call", "Call to local library"},
 	{"container-spawning", "Spawn a container"},
+	{"snmp", "Simple Network Management Protocol (SNMP)"},
 }
 
 func (what Protocol) String() string {
@@ -967,7 +970,9 @@ const (
 	Scheduler
 	Mainframe
 	BlockStorage
-	Library
+	Library,
+	Firewall,
+	PKI
 )
 
 func TechnicalAssetTechnologyValues() []TypeEnum {
@@ -1029,6 +1034,8 @@ func TechnicalAssetTechnologyValues() []TypeEnum {
 		Mainframe,
 		BlockStorage,
 		Library,
+		Firewall,
+		PKI
 	}
 }
 
@@ -1090,6 +1097,8 @@ var TechnicalAssetTechnologyTypeDescription = [...]TypeDescription{
 	{"mainframe", "A central, big computer"},
 	{"block-storage", "SAN or similar central file storage"},
 	{"library", "A software library"},
+	{"firewall", "A network firewall"},
+	{"pki", "A component for PKI Infrastructure (e.g. CA) storing and issuing certificates"},
 }
 
 func (what TechnicalAssetTechnology) String() string {
@@ -1114,11 +1123,11 @@ func (what TechnicalAssetTechnology) IsIdentityRelated() bool {
 }
 
 func (what TechnicalAssetTechnology) IsSecurityControlRelated() bool {
-	return what == Vault || what == HSM || what == WAF || what == IDS || what == IPS
+	return what == Vault || what == HSM || what == WAF || what == IDS || what == IPS || what == Firewall || what == PKI
 }
 
 func (what TechnicalAssetTechnology) IsUnprotectedCommsTolerated() bool {
-	return what == Monitoring || what == IDS || what == IPS
+	return what == Monitoring || what == IDS || what == IPS || what == PKI
 }
 
 func (what TechnicalAssetTechnology) IsUnnecessaryDataTolerated() bool {
@@ -1126,7 +1135,7 @@ func (what TechnicalAssetTechnology) IsUnnecessaryDataTolerated() bool {
 }
 
 func (what TechnicalAssetTechnology) IsCloseToHighValueTargetsTolerated() bool {
-	return what == Monitoring || what == IDS || what == IPS || what == LoadBalancer || what == ReverseProxy
+	return what == Monitoring || what == IDS || what == IPS || what == LoadBalancer || what == ReverseProxy || what == Firewall
 }
 
 func (what TechnicalAssetTechnology) IsClient() bool {
@@ -1173,7 +1182,7 @@ func (what TechnicalAssetTechnology) IsDevelopmentRelevant() bool {
 }
 
 func (what TechnicalAssetTechnology) IsTrafficForwarding() bool {
-	return what == LoadBalancer || what == ReverseProxy || what == WAF
+	return what == LoadBalancer || what == ReverseProxy || what == WAF || what == Firewall
 }
 
 func (what TechnicalAssetTechnology) IsEmbeddedComponent() bool {

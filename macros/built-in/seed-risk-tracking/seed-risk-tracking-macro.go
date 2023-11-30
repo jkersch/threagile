@@ -2,6 +2,7 @@ package seed_risk_tracking
 
 import (
 	"github.com/threagile/threagile/model"
+	"fmt"
 	"sort"
 	"strconv"
 )
@@ -35,6 +36,7 @@ func Execute(modelInput *model.ModelInput) (message string, validResult bool, er
 	for id, risk := range model.GeneratedRisksBySyntheticId {
 		if !risk.IsRiskTracked() {
 			syntheticRiskIDsToCreateTrackingFor = append(syntheticRiskIDsToCreateTrackingFor, id)
+			fmt.Println("Creating Risk :", syntheticRiskIDsToCreateTrackingFor)
 		}
 	}
 	sort.Strings(syntheticRiskIDsToCreateTrackingFor)

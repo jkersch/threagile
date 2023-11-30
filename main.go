@@ -4367,6 +4367,8 @@ func parseModel(inputFilename string) {
 
 			var encryption model.EncryptionStyle
 			switch asset.Encryption {
+			case model.UnknownEncryption.String():
+				encryption = model.UnknownEncryption
 			case model.NoneEncryption.String():
 				encryption = model.NoneEncryption
 			case model.Transparent.String():

@@ -626,7 +626,7 @@ func (what Usage) Title() string {
 type EncryptionStyle int
 
 const (
-	Unknown EncryptionStyle = iota
+	UnknownEncryption EncryptionStyle = iota
 	NoneEncryption 
 	Transparent
 	DataWithSymmetricSharedKey
@@ -636,7 +636,7 @@ const (
 
 func EncryptionStyleValues() []TypeEnum {
 	return []TypeEnum{
-		Unknown,
+		UnknownEncryption,
 		NoneEncryption,
 		Transparent,
 		DataWithSymmetricSharedKey,
@@ -674,7 +674,7 @@ func (what EncryptionStyle) Explain() string {
 }
 
 func (what EncryptionStyle) Title() string {
-	return [...]string{"Unknown", "None", "Transparent", "Data with Symmetric Shared Key", "Data with Asymmetric Shared Key", "Data with Enduser Individual Key"}[what]
+	return [...]string{"UnknownEncryption", "None", "Transparent", "Data with Symmetric Shared Key", "Data with Asymmetric Shared Key", "Data with Enduser Individual Key"}[what]
 }
 
 type DataFormat int

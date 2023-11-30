@@ -44,7 +44,7 @@ func GenerateRisks() []model.Risk {
 				}
 			}
 			if technicalAsset.Encryption == model.UnknownEncryption {
-				risks = append(risks, createRiskTechAsset(technicalAsset))
+				risks = append(risks, createRiskUnknownEncryption(technicalAsset))
 			}
 		}
 	}
@@ -53,6 +53,22 @@ func GenerateRisks() []model.Risk {
 
 func createRiskTechAsset(technicalAsset model.TechnicalAsset) model.Risk {
 	title := "<b>Unknown Technology</b> specified at technical asset <b>" + technicalAsset.Title + "</b>"
+	risk := model.Risk{
+		Category:                     Category(),
+		Severity:                     model.CalculateSeverity(model.Unlikely, model.LowImpact),
+		ExploitationLikelihood:       model.Unlikely,
+		ExploitationImpact:           model.LowImpact,
+		Title:                        title,
+		MostRelevantTechnicalAssetId: technicalAsset.Id,
+		DataBreachProbability:        model.Improbable,
+		DataBreachTechnicalAssetIDs:  []string{technicalAsset.Id},
+	}
+	risk.SyntheticId = risk.Category.Id + "@" + technicalAsset.Id
+	return risk
+}
+
+func createRiskUnknownEncryption(technicalAsset model.TechnicalAsset) model.Risk {
+	title := "<b>Unknown Encryption at Rest</b> specified at technical asset <b>" + technicalAsset.Title + "</b>"
 	risk := model.Risk{
 		Category:                     Category(),
 		Severity:                     model.CalculateSeverity(model.Unlikely, model.LowImpact),

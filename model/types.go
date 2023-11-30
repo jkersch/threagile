@@ -656,8 +656,8 @@ func ParseEncryptionStyle(value string) (encryptionStyle EncryptionStyle, err er
 }
 
 var EncryptionStyleTypeDescription = [...]TypeDescription{
+	{"unknownencryption", "Unknown whether encryption is available"},
 	{"none", "No encryption"},
-	{"unknown", "Unknown whether encryption is available"},
 	{"transparent", "Encrypted data at rest"},
 	{"data-with-symmetric-shared-key", "Both communication partners have the same key. This must be kept secret"},
 	{"data-with-asymmetric-shared-key", "The key is split into public and private. Those two are shared between partners"},

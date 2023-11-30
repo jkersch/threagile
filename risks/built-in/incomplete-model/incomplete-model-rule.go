@@ -43,6 +43,9 @@ func GenerateRisks() []model.Risk {
 					risks = append(risks, createRiskCommLink(technicalAsset, commLink))
 				}
 			}
+			if technicalAsset.Encryption == model.UnknownTechnology {
+				risks = append(risks, createRiskTechAsset(technicalAsset))
+			}
 		}
 	}
 	return risks

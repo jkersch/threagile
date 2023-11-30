@@ -160,7 +160,7 @@ func footerFunc() {
 	addBreadcrumb()
 	pdf.SetFont("Helvetica", "", 10)
 	pdf.SetTextColor(127, 127, 127)
-	pdf.Text(8.6, 284, "Threat Model Report via Threagile") //: "+model.ParsedModelRoot.Title)
+	pdf.Text(8.6, 284, "Threat Model Report") //: "+model.ParsedModelRoot.Title)
 	pdf.Link(8.4, 281, 54.6, 4, homeLink)
 	pageNo++
 	text := "Page " + strconv.Itoa(pageNo)
@@ -224,12 +224,12 @@ func createCover() {
 func createTableOfContents() {
 	uni := pdf.UnicodeTranslatorFromDescriptor("")
 	pdf.AddPage()
-	currentChapterTitleBreadcrumb = "Table of Contents"
+	currentChapterTitleBreadcrumb = "Inhaltsverzeichnis"
 	homeLink = pdf.AddLink()
 	defineLinkTarget("{home}")
 	gofpdi.UseImportedTemplate(pdf, contentTemplateId, 0, 0, 0, 300)
 	pdf.SetFont("Helvetica", "B", fontSizeHeadline)
-	pdf.Text(11, 40, "Table of Contents")
+	pdf.Text(11, 40, "Inhaltsverzeichnis")
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdf.SetY(46)
 
@@ -241,7 +241,7 @@ func createTableOfContents() {
 
 	var y float64 = 50
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
-	pdf.Text(11, y, "Results Overview")
+	pdf.Text(11, y, "Übersicht")
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 
 	y += 6
@@ -250,38 +250,38 @@ func createTableOfContents() {
 	pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
 	pdf.Link(10, y-5, 172.5, 6.5, pdf.AddLink())
 
-	risks := "Risks"
-	catStr := "Categories"
+	risks := "Risiken"
+	catStr := "Kategorien"
 	count, catCount := model.TotalRiskCount(), len(model.GeneratedRisksByCategory)
 	if count == 1 {
-		risks = "Risk"
+		risks = "Risiko"
 	}
 	if catCount == 1 {
-		catStr = "Category"
+		catStr = "Kategorie"
 	}
 	y += 6
-	pdf.Text(11, y, "    "+"Impact Analysis of "+strconv.Itoa(count)+" Initial "+risks+" in "+strconv.Itoa(catCount)+" "+catStr)
+	pdf.Text(11, y, "    "+"Impact Analyse von "+strconv.Itoa(count)+" initialen "+risks+" in "+strconv.Itoa(catCount)+" "+catStr)
 	pdf.Text(175, y, "{impact-analysis-initial-risks}")
 	pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
 	pdf.Link(10, y-5, 172.5, 6.5, pdf.AddLink())
 
 	y += 6
-	pdf.Text(11, y, "    "+"Risk Mitigation")
+	pdf.Text(11, y, "    "+"Risiko Mitigation")
 	pdf.Text(175, y, "{risk-mitigation-status}")
 	pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
 	pdf.Link(10, y-5, 172.5, 6.5, pdf.AddLink())
 
 	y += 6
-	risks = "Risks"
-	catStr = "Categories"
+	risks = "Risiken"
+	catStr = "Kategorien"
 	count, catCount = len(model.FilteredByStillAtRisk()), len(model.CategoriesOfOnlyRisksStillAtRisk(model.GeneratedRisksByCategory))
 	if count == 1 {
-		risks = "Risk"
+		risks = "Risiko"
 	}
 	if catCount == 1 {
-		catStr = "Category"
+		catStr = "kategorie"
 	}
-	pdf.Text(11, y, "    "+"Impact Analysis of "+strconv.Itoa(count)+" Remaining "+risks+" in "+strconv.Itoa(catCount)+" "+catStr)
+	pdf.Text(11, y, "    "+"Impact Analyse von "+strconv.Itoa(count)+" verbleibenden "+risks+" in "+strconv.Itoa(catCount)+" "+catStr)
 	pdf.Text(175, y, "{impact-analysis-remaining-risks}")
 	pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
 	pdf.Link(10, y-5, 172.5, 6.5, pdf.AddLink())
@@ -317,13 +317,13 @@ func createTableOfContents() {
 	pdf.Link(10, y-5, 172.5, 6.5, pdf.AddLink())
 
 	y += 6
-	pdf.Text(11, y, "    "+"STRIDE Classification of Identified Risks")
+	pdf.Text(11, y, "    "+"STRIDE Klassifikation der identifizierten Risiken")
 	pdf.Text(175, y, "{stride}")
 	pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
 	pdf.Link(10, y-5, 172.5, 6.5, pdf.AddLink())
 
 	y += 6
-	pdf.Text(11, y, "    "+"Assignment by Function")
+	pdf.Text(11, y, "    "+"Zuweising nach Funktion")
 	pdf.Text(175, y, "{function-assignment}")
 	pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
 	pdf.Link(10, y-5, 172.5, 6.5, pdf.AddLink())
@@ -382,15 +382,15 @@ func createTableOfContents() {
 	pdf.Link(10, y-5, 172.5, 6.5, pdf.AddLink())
 
 	y += 6
-	questions := "Questions"
+	questions := "Fragen"
 	count = len(model.ParsedModelRoot.Questions)
 	if count == 1 {
-		questions = "Question"
+		questions = "Frage"
 	}
 	if model.QuestionsUnanswered() > 0 {
 		colors.ColorModelFailure(pdf)
 	}
-	pdf.Text(11, y, "    "+"Questions: "+strconv.Itoa(model.QuestionsUnanswered())+" / "+strconv.Itoa(count)+" "+questions)
+	pdf.Text(11, y, "    "+"Frage: "+strconv.Itoa(model.QuestionsUnanswered())+" / "+strconv.Itoa(count)+" "+questions)
 	pdf.Text(175, y, "{questions}")
 	pdfColorBlack()
 	pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
@@ -407,10 +407,10 @@ func createTableOfContents() {
 		}
 		pdf.SetFont("Helvetica", "B", fontSizeBody)
 		pdf.SetTextColor(0, 0, 0)
-		pdf.Text(11, y, "Risks by Vulnerability Category")
+		pdf.Text(11, y, "Risiken nach Vulnerability Kategorie")
 		pdf.SetFont("Helvetica", "", fontSizeBody)
 		y += 6
-		pdf.Text(11, y, "    "+"Identified Risks by Vulnerability Category")
+		pdf.Text(11, y, "    "+"Identifizierte Risiken nach Vulnerability Kategorie")
 		pdf.Text(175, y, "{intro-risks-by-vulnerability-category}")
 		pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
 		pdf.Link(10, y-5, 172.5, 6.5, pdf.AddLink())

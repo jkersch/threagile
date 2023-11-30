@@ -4607,6 +4607,8 @@ func parseModel(inputFilename string) {
 						protocol = model.InProcessLibraryCall
 					case model.ContainerSpawning.String():
 						protocol = model.ContainerSpawning
+					case model.SNMP.String():
+						protocol = model.SNMP
 					default:
 						panic(errors.New("unknown 'protocol' of technical asset '" + title + "' communication link '" + commLinkTitle + "': " + fmt.Sprintf("%v", commLink.Protocol)))
 					}

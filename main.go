@@ -4361,6 +4361,10 @@ func parseModel(inputFilename string) {
 				technicalAssetTechnology = model.Firewall
 			case model.PKI.String():
 				technicalAssetTechnology = model.PKI
+			case model.NAC.String():
+				technicalAssetTechnology = model.NAC
+			case model.NetworkEquipment.String():
+				technicalAssetTechnology = model.NetworkEquipment
 			default:
 				panic(errors.New("unknown 'technology' value of technical asset '" + title + "': " + fmt.Sprintf("%v", asset.Technology)))
 			}
@@ -4609,6 +4613,18 @@ func parseModel(inputFilename string) {
 						protocol = model.ContainerSpawning
 					case model.SNMP.String():
 						protocol = model.SNMP
+					case model.Syslog.String():
+						protocol = model.Syslog
+					case model.TCP.String():
+						protocol = model.TCP
+					case model.RADIUS.String():
+						protocol = model.RADIUS
+					case model.Netflow.String():
+						protocol = model.Netflow
+					case model.Netconf.String():
+						protocol = model.Netconf
+					case model.TACACS.String():
+						protocol = model.TACACS
 					default:
 						panic(errors.New("unknown 'protocol' of technical asset '" + title + "' communication link '" + commLinkTitle + "': " + fmt.Sprintf("%v", commLink.Protocol)))
 					}

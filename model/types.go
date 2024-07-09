@@ -774,6 +774,12 @@ const (
 	InProcessLibraryCall
 	ContainerSpawning
 	SNMP
+	Syslog
+	TCP
+	RADIUS
+	Netflow
+	Netconf
+	TACACS
 )
 
 func ProtocolValues() []TypeEnum {
@@ -826,6 +832,12 @@ func ProtocolValues() []TypeEnum {
 		InProcessLibraryCall,
 		ContainerSpawning,
 		SNMP,
+		Syslog,
+		TCP,
+		RADIUS,
+		Netflow,
+		Netconf,
+		TACACS,
 	}
 }
 
@@ -878,6 +890,12 @@ var ProtocolTypeDescription = [...]TypeDescription{
 	{"in-process-library-call", "Call to local library"},
 	{"container-spawning", "Spawn a container"},
 	{"snmp", "Simple Network Management Protocol (SNMP)"},
+	{"syslog", "Syslog traffic"},
+	{"tcp", "Unspecified TCP traffic"},
+	{"RADIUS", "RADIUS based traffic"},
+	{"Netflow", "Netflow data"},
+	{"TACACS", "TACACS traffic"},
+	{"Netconf", "Netconf traffic"},
 }
 
 func (what Protocol) String() string {
@@ -976,6 +994,8 @@ const (
 	Library
 	Firewall
 	PKI
+	NAC
+	NetworkEquipment
 )
 
 func TechnicalAssetTechnologyValues() []TypeEnum {
@@ -1039,6 +1059,8 @@ func TechnicalAssetTechnologyValues() []TypeEnum {
 		Library,
 		Firewall,
 		PKI,
+		NAC,
+		NetworkEquipment,
 	}
 }
 
@@ -1102,6 +1124,8 @@ var TechnicalAssetTechnologyTypeDescription = [...]TypeDescription{
 	{"library", "A software library"},
 	{"firewall", "A network firewall"},
 	{"pki", "A component for PKI Infrastructure (e.g. CA) storing and issuing certificates"},
+	{"nac", "A component to control network access"},
+	{"network-equipment" , "general purpose network equipment (switches, hubs, routers2)"},
 }
 
 func (what TechnicalAssetTechnology) String() string {
@@ -1126,7 +1150,7 @@ func (what TechnicalAssetTechnology) IsIdentityRelated() bool {
 }
 
 func (what TechnicalAssetTechnology) IsSecurityControlRelated() bool {
-	return what == Vault || what == HSM || what == WAF || what == IDS || what == IPS || what == Firewall || what == PKI
+	return what == Vault || what == HSM || what == WAF || what == IDS || what == IPS || what == Firewall || what == PKI || what == NAC
 }
 
 func (what TechnicalAssetTechnology) IsUnprotectedCommsTolerated() bool {
@@ -1138,7 +1162,7 @@ func (what TechnicalAssetTechnology) IsUnnecessaryDataTolerated() bool {
 }
 
 func (what TechnicalAssetTechnology) IsCloseToHighValueTargetsTolerated() bool {
-	return what == Monitoring || what == IDS || what == IPS || what == LoadBalancer || what == ReverseProxy || what == Firewall
+	return what == Monitoring || what == IDS || what == IPS || what == LoadBalancer || what == ReverseProxy || what == Firewall || what == NetworkEquipment
 }
 
 func (what TechnicalAssetTechnology) IsClient() bool {

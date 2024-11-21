@@ -4365,6 +4365,8 @@ func parseModel(inputFilename string) {
 				technicalAssetTechnology = model.NAC
 			case model.NetworkEquipment.String():
 				technicalAssetTechnology = model.NetworkEquipment
+			case model.Management_Application.String():
+				technicalAssetTechnology = model.Management_Application
 			default:
 				panic(errors.New("unknown 'technology' value of technical asset '" + title + "': " + fmt.Sprintf("%v", asset.Technology)))
 			}

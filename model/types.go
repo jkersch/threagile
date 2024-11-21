@@ -996,6 +996,7 @@ const (
 	PKI
 	NAC
 	NetworkEquipment
+	Management_Application
 )
 
 func TechnicalAssetTechnologyValues() []TypeEnum {
@@ -1061,6 +1062,7 @@ func TechnicalAssetTechnologyValues() []TypeEnum {
 		PKI,
 		NAC,
 		NetworkEquipment,
+		Management_Application,
 	}
 }
 
@@ -1126,6 +1128,8 @@ var TechnicalAssetTechnologyTypeDescription = [...]TypeDescription{
 	{"pki", "A component for PKI Infrastructure (e.g. CA) storing and issuing certificates"},
 	{"nac", "A component to control network access"},
 	{"network-equipment" , "general purpose network equipment (switches, hubs, routers2)"},
+	{"management-application" , "Management Application"},
+	
 }
 
 func (what TechnicalAssetTechnology) String() string {

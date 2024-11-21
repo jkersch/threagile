@@ -780,6 +780,7 @@ const (
 	Netflow
 	Netconf
 	TACACS
+	DHCP
 )
 
 func ProtocolValues() []TypeEnum {
@@ -838,6 +839,7 @@ func ProtocolValues() []TypeEnum {
 		Netflow,
 		Netconf,
 		TACACS,
+		DHCP,
 	}
 }
 
@@ -892,10 +894,11 @@ var ProtocolTypeDescription = [...]TypeDescription{
 	{"snmp", "Simple Network Management Protocol (SNMP)"},
 	{"syslog", "Syslog traffic"},
 	{"tcp", "Unspecified TCP traffic"},
-	{"RADIUS", "RADIUS based traffic"},
-	{"Netflow", "Netflow data"},
-	{"TACACS", "TACACS traffic"},
-	{"Netconf", "Netconf traffic"},
+	{"radius", "RADIUS based traffic"},
+	{"netflow", "Netflow data"},
+	{"tacacs", "TACACS traffic"},
+	{"netconf", "Netconf traffic"},
+	{"dhcp", "DHCP traffic"},
 }
 
 func (what Protocol) String() string {

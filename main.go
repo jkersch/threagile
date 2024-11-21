@@ -4627,6 +4627,8 @@ func parseModel(inputFilename string) {
 						protocol = model.Netconf
 					case model.TACACS.String():
 						protocol = model.TACACS
+					case model.DHCP.String():
+						protocol = model.DHCP
 					default:
 						panic(errors.New("unknown 'protocol' of technical asset '" + title + "' communication link '" + commLinkTitle + "': " + fmt.Sprintf("%v", commLink.Protocol)))
 					}
